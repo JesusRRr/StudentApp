@@ -1,18 +1,21 @@
-import {Button} from "antd";
+import { useState, useEffect} from 'react';
 import './App.css';
 import { getAllStudents } from "./clients/studentClient"
 
 function App() {
+  const [students, setStudents] = useState([]);
+  const fetchStudents = () => 
+    getAllStudents()
+      .then(res=> res.json())
+      .then(data => setStudents(data))
 
-  getAllStudents()
-    .then(response => response.json())
-    .then(console.log)
-  return (
-    <div className="App">
+  useEffect(() =>{
+    console.log("component is mounted");
+    fetchStudents();
+  }, []);
 
-      <Button type='primary'>Hello</Button>
-    </div>
-  );
+  return <div> {students.length} </div>;
+
 }
 
 export default App;
