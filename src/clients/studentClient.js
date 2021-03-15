@@ -1,13 +1,15 @@
 import fetch from 'unfetch';
 
-const checkStatus = res =>{
-    if (res.ok){
-        return res;
+const checkStatus = response => {
+    if (response.ok){
+        return response;
     }
-    const error = new Error(res.statusText);
-    error.response = res;
+
+    const error = new Error(response.statusText);
+    error.response = response;
     return Promise.reject(error);
 }
+
 export const getAllStudents = () =>
-    fetch("http://localhost:8080/api/students")
-        .then(checkStatus);
+    fetch("/api/v1/students")
+        .then(checkStatus)
