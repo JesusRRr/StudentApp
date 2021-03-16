@@ -57,7 +57,7 @@ function App() {
     if(students.length<=0){
       return "no data available"
     } 
-    return <Table dataSource={students} columns={columns}/>
+    return <Table dataSource={students} columns={columns} pagination={{ pageSize: 50 }} scroll={{ y: 240 }}/>
   }
 
     return <Layout style={{ minHeight: '100vh' }}>
