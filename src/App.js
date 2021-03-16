@@ -1,13 +1,14 @@
 import { useState, useEffect} from 'react';
 import './App.css';
 import { getAllStudents } from "./clients/studentClient"
-import { Layout, Menu, Breadcrumb, Table } from 'antd';
+import { Layout, Menu, Breadcrumb, Table, Spin} from 'antd';
 import {
   DesktopOutlined,
   PieChartOutlined,
   FileOutlined,
   TeamOutlined,
   UserOutlined,
+  LoadingOutlined
 } from '@ant-design/icons';
 
 
@@ -39,14 +40,20 @@ const columns = [
 ];
 
 
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
 function App() {
   const [students, setStudents] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
+  const [fetching, setFetching] = useState(true);
 
   const fetchStudents = () => 
     getAllStudents()
       .then(res=> res.json())
-      .then(data => setStudents(data))
+      .then(data => {
+        setStudents(data);
+        setFetching(false);
+      });
 
   useEffect(() =>{
     console.log("component is mounted");
@@ -54,6 +61,9 @@ function App() {
   }, []);
 
   const renderStudents = ()=>{
+    if(fetching){
+      return <Spin indicator={antIcon} />
+    }
     if(students.length<=0){
       return "no data available"
     } 
@@ -63,6 +73,7 @@ function App() {
       pagination={{ pageSize: 50 }} 
       scroll={{ y: 240 }}
       title={() => 'Students'}
+      rowKey={(student) => student.id}
     />;
   }
 
